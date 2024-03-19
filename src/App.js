@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import { useWindowSize } from "@uidotdev/usehooks";
+import styled from "styled-components";
+import Content from "./components/Content";
+import Header from "./components/Header";
+import { useTheme } from "./context/themeContext";
 
 function App() {
+  const theme = useTheme();
+  // Get real-time window size for responsive design
+  const size = useWindowSize();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppStyled theme={theme}>
+      <Header size={size} />
+      <Content size={size} />
+    </AppStyled>
   );
 }
+
+const AppStyled = styled.div`
+  min-height: 100vh;
+  background-color: ${(props) => props.theme.colorBg1};
+`;
 
 export default App;
