@@ -1,31 +1,24 @@
 import { GiphyFetch } from "@giphy/js-fetch-api";
-import { Grid } from "@giphy/react-components";
+
 import React, { useState } from "react";
-import styled from "styled-components";
-import { useGlobalContext } from "../context/globalContext";
-import { useTheme } from "../context/themeContext";
-import { search, trendingIcon } from "../icons/icons";
-import Modal from "./Modal";
-import { timeTrim } from "../utils/timeTrim";
 
-const API_KEY = process.env.REACT_APP_GIPHY_API_KEY;
+import { useGlobalContext } from "../../context/globalContext";
+import { useTheme } from "../../context/themeContext";
+import { search, trendingIcon } from "../../icons/icons";
+import { timeTrim } from "../../utils/timeTrim";
+import Modal from "../Modal";
+import { API_KEY, SELECTED_GIF_INIT_TEMPLATE } from "./constant";
+import { ContentContainer, GridStyled } from "./styled";
 
-function Content({ size }) {
+const Content = ({ size }) => {
   const theme = useTheme();
   const { searchTerm } = useGlobalContext();
-  const [selectedGif, setSelectedGif] = useState({
-    title: "",
-    giff: "",
-    embed_url: "",
-    import_datetime: "",
-    username: "",
-    rating: "",
-    size: "",
-  });
+  const [selectedGif, setSelectedGif] = useState(SELECTED_GIF_INIT_TEMPLATE);
   const [modal, setModal] = useState(false);
 
   // Use @giphy/js-fetch-api to fetch gifs, instantiate with api key
   const gf = new GiphyFetch(API_KEY);
+
   // Gifs search callback (if no search keyword then search for trendings Gifs)
   const fetchGifs =
     searchTerm.length > 0
@@ -34,10 +27,9 @@ function Content({ size }) {
 
   // Handle GIF selecting by open pop up modal
   const handleSelectGif = (gif) => {
-    console.log(gif);
     setSelectedGif({
       title: gif.title,
-      giff: gif.images.original.url,
+      giff: gif.images.fixed_width.url,
       embed_url: gif.embed_url,
       import_datetime: timeTrim(gif.import_datetime),
       username: gif.username,
@@ -54,11 +46,13 @@ function Content({ size }) {
       ) : (
         <h2>{trendingIcon} Trending</h2>
       )}
-      {modal && <Modal selectedGif={selectedGif} setModal={setModal} />}
+      {modal && (
+        <Modal selectedGif={selectedGif} setModal={setModal} size={size} />
+      )}
       <GridStyled
         theme={theme}
         width={size.width * 0.96}
-        columns={4}
+        columns={size.width < 992 ? 3 : 4}
         fetchGifs={fetchGifs}
         noLink={true}
         onGifClick={(gif) => handleSelectGif(gif)}
@@ -67,28 +61,6 @@ function Content({ size }) {
       />
     </ContentContainer>
   );
-}
-
-const ContentContainer = styled.div`
-  padding: 2rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-
-  h2 {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-    color: ${(props) => props.theme.colorWhite};
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-`;
-
-const GridStyled = styled(Grid)`
-  color: ${(props) => props.theme.colorWhite};
-  text-align: center;
-`;
+};
 
 export default Content;

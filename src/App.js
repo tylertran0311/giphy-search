@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Content from "./components/Content";
 import Header from "./components/Header";
 import { useTheme } from "./context/themeContext";
+import ScrollToTopBtn from "./components/ScrollToTopBtn";
 
 function App() {
   const theme = useTheme();
@@ -12,6 +13,7 @@ function App() {
   return (
     <AppStyled theme={theme}>
       <Header size={size} />
+      <ScrollToTopBtn />
       <Content size={size} />
     </AppStyled>
   );
@@ -20,6 +22,7 @@ function App() {
 const AppStyled = styled.div`
   min-height: 100vh;
   background-color: ${(props) => props.theme.colorBg1};
+  position: relative;
 `;
 
 export default App;

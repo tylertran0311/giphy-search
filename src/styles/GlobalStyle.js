@@ -12,7 +12,7 @@ export const GlobalStyle = createGlobalStyle`
     min-height: 100vh;
     font-size: 1.2rem;
     ::-webkit-scrollbar {
-      width: 7px;
+      width: 0.4375rem;
     }
     ::-webkit-scrollbar-track {
       background: #252525;
@@ -22,4 +22,5 @@ export const GlobalStyle = createGlobalStyle`
       border-radius: 1rem;
     }
   }
+  html {scroll-behavior: smooth;}
 `;
